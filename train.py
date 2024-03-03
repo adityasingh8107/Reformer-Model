@@ -17,7 +17,8 @@ from sklearn.metrics import accuracy_score
 dataset = load_dataset("imdb")
 
 model_name = "google/reformer-crime-and-punishment"
-tokenizer = AutoTokenizer.from_pretrained(model_name, max_length=350)
+tokenizer = AutoTokenizer.from_pretrained(model_name, max_length=256)
+
 
 if tokenizer.pad_token is None:
     tokenizer.pad_token = tokenizer.eos_token
