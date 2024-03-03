@@ -14,7 +14,8 @@ from datasets import load_dataset
 from sklearn.metrics import accuracy_score
 
 model_name = "google/reformer-crime-and-punishment"
-model = ReformerForSequenceClassification.from_pretrained(model_name, num_labels=2) 
+model = ReformerForSequenceClassification.from_pretrained(model_name, num_labels=2)
+batch_size = 32
 
 def compute_metrics(eval_pred):
     logits, labels = eval_pred.predictions, eval_pred.label_ids
@@ -22,13 +23,18 @@ def compute_metrics(eval_pred):
     return {"accuracy": accuracy_score(labels, predictions)}
 
 def train(model, train_data, test_data, epochs, learning_rate, loss_fn, optimizer, device):
+    num_batches = len(train_data) // batch_size
 
     model.to(device)
     for epoch in range(epochs):
         print(f"Epoch {epoch+1}/{epochs}")
+        for i in range(num_batches):
 
-        model.train()
-        for batch_idx, batch in enumerate(train_data):
+        
+
+            model.train()
+            batch = train_data[i * batch_size: (i + 1) * batch_size]
+
             data, labels = batch["sentence"], batch["label"]
             data, labels = data.to(device), labels.to(device)
 
@@ -39,8 +45,8 @@ def train(model, train_data, test_data, epochs, learning_rate, loss_fn, optimize
             loss.backward()
             optimizer.step()
 
-            if batch_idx % 100 == 0:
-                print(f"Batch {batch_idx+1}/{len(train_data)} - Loss: {loss.item():.4f}")
+            #if batch_idx % 100 == 0:
+                #print(f"Batch {batch_idx+1}/{len(train_data)} - Loss: {loss.item():.4f}")
 
         model.eval()
         with torch.no_grad():
