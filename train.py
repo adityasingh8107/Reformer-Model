@@ -48,7 +48,7 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)  # Choose su
 
 for i in range(num_batches):
     batch_data = train_dataset[i * batch_size: (i + 1) * batch_size]
-    train(model, train_dataset, test_dataset, 5, learning_rate, loss_fn, optimizer, device)
+    train(model, batch_data, test_dataset, 5, learning_rate, loss_fn, optimizer, device)
 
 print("Training complete!")
 
