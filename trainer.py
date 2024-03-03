@@ -10,7 +10,6 @@ from transformers import (
     TrainingArguments,
 )
 from Model import ReformerForSequenceClassification
-from datasets import load_dataset
 from sklearn.metrics import accuracy_score
 
 model_name = "google/reformer-crime-and-punishment"
