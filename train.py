@@ -15,8 +15,6 @@ from datasets import load_dataset
 from sklearn.metrics import accuracy_score
 
 dataset = load_dataset("imdb")
-data = dataset['train']['test']
-np.random.shuffle(dataset)
 
 model_name = "google/reformer-crime-and-punishment"
 tokenizer = AutoTokenizer.from_pretrained(model_name, max_length=350)
@@ -38,17 +36,15 @@ dataset = dataset.map(preprocess_function, batched=True)
 
 train_dataset = dataset["train"]
 test_dataset = dataset["test"]
+np.random.shuffle(train_dataset)
+np.random.shuffle(test_dataset)
 
-batch_size = 32
-num_batches = len(train_dataset) // batch_size
 
 learning_rate = 2e-5  # Adjust as needed
 loss_fn = torch.nn.CrossEntropyLoss()  # For binary classification
 optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)  # Choose suitable optimizer
 
-for i in range(num_batches):
-    batch_data = train_dataset[i * batch_size: (i + 1) * batch_size]
-    train(model, batch_data, test_dataset, 5, learning_rate, loss_fn, optimizer, device)
+train(model, batch_data, test_dataset, 5, learning_rate, loss_fn, optimizer, device)
 
 print("Training complete!")
 
