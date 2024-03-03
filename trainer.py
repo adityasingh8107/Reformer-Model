@@ -14,7 +14,7 @@ from sklearn.metrics import accuracy_score
 
 model_name = "google/reformer-crime-and-punishment"
 model = ReformerForSequenceClassification.from_pretrained(model_name, num_labels=2)
-batch_size = 32
+batch_size = 8
 
 def compute_metrics(eval_pred):
     logits, labels = eval_pred.predictions, eval_pred.label_ids
